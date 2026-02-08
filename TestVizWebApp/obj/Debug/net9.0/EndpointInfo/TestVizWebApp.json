@@ -1,0 +1,380 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "TestVizWebApp",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/V0/dataset": {
+      "post": {
+        "tags": [
+          "Viz"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/V0/viz/bar": {
+      "post": {
+        "tags": [
+          "Viz"
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BarChartRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BarChartRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BarChartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarChartResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarChartResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarChartResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AggregationType": {
+        "enum": [
+          "sum",
+          "avg",
+          "count"
+        ],
+        "type": "string"
+      },
+      "BarChartItem": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "measure": {
+            "type": "number",
+            "format": "double"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BarChartRequest": {
+        "type": "object",
+        "properties": {
+          "category_field": {
+            "type": "string",
+            "nullable": true
+          },
+          "measure": {
+            "$ref": "#/components/schemas/MeasureRequest"
+          },
+          "category_filter": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "top": {
+            "$ref": "#/components/schemas/TopRequest"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortRequest"
+          },
+          "color_condition": {
+            "$ref": "#/components/schemas/ColorConditionRequest"
+          },
+          "reference_line": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BarChartResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BarChartItem"
+            },
+            "nullable": true
+          },
+          "reference_line": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ColorConditionRequest": {
+        "type": "object",
+        "properties": {
+          "color": {
+            "$ref": "#/components/schemas/ColorType"
+          },
+          "comparison": {
+            "$ref": "#/components/schemas/ComparisonType"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ColorType": {
+        "enum": [
+          "red",
+          "blue",
+          "magenta"
+        ],
+        "type": "string"
+      },
+      "ComparisonType": {
+        "enum": [
+          "gt",
+          "lt",
+          "eq"
+        ],
+        "type": "string"
+      },
+      "MeasureRequest": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "aggregation": {
+            "$ref": "#/components/schemas/AggregationType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "SortField": {
+        "enum": [
+          "measure",
+          "category"
+        ],
+        "type": "string"
+      },
+      "SortOrder": {
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "type": "string"
+      },
+      "SortRequest": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "$ref": "#/components/schemas/SortField"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortOrder"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TopRequest": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortOrder"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Viz"
+    }
+  ]
+}

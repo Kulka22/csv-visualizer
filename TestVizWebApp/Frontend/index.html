@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Data Visualization</h1>
+
+    <div class="container">
+        <div class="controls">
+            <h2>1. Upload CSV</h2>
+            <input type="file" id="csvFileInput" accept=".csv">
+
+            <h2>2. Configure Chart</h2>
+            <form id="chartConfigForm">
+                <fieldset>
+                    <legend>Основные параметры</legend>
+                    <div>
+                        <label for="categoryField">Поле категории:</label>
+                        <select id="categoryField" name="category_field" required disabled>
+                            <option value="">Сначала загрузите файл</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="measureField">Поле меры:</label>
+                        <select id="measureField" name="measure_field" required disabled>
+                            <option value="">Сначала загрузите файл</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="aggregation">Агрегация:</label>
+                        <select id="aggregation" name="aggregation">
+                            <option value="SUM">Sum</option>
+                            <option value="AVG">Average</option>
+                            <option value="COUNT">Count</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Фильтры и выборка</legend>
+                    <div>
+                        <label for="categoryFilter">Фильтр категорий (через запятую):</label>
+                        <input type="text" id="categoryFilter" name="category_filter">
+                    </div>
+                    <div>
+                        <input type="checkbox" id="enableTop" name="enable_top">
+                        <label for="enableTop">Топ N значений</label>
+                        <div id="topControls" class="hidden">
+                            <label for="topCount">Количество:</label>
+                            <input type="number" id="topCount" name="top_count" value="5">
+                            <label for="topSort">Сортировка:</label>
+                            <select id="topSort" name="top_sort">
+                                <option value="DESC">По убыванию</option>
+                                <option value="ASC">По возрастанию</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Сортировка</legend>
+                     <div>
+                        <input type="checkbox" id="enableSort" name="enable_sort">
+                        <label for="enableSort">Включить сортировку</label>
+                        <div id="sortControls" class="hidden">
+                            <label for="sortField">Поле для сортировки:</label>
+                            <select id="sortField" name="sort_field">
+                                <option value="measure">По мере</option>
+                                <option value="category">По категории</option>
+                            </select>
+                            <label for="sortOrder">Порядок:</label>
+                            <select id="sortOrder" name="sort_order">
+                                <option value="ASC">По возрастанию</option>
+                                <option value="DESC">По убыванию</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Оформление</legend>
+                    <div>
+                        <input type="checkbox" id="enableColorCondition" name="enable_color_condition">
+                        <label for="enableColorCondition">Условное форматирование</label>
+                         <div id="colorConditionControls" class="hidden">
+                            <label for="colorConditionColor">Цвет:</label>
+                            <select id="colorConditionColor" name="color_condition_color">
+                                <option value="RED">Красный</option>
+                                <option value="BLUE">Синий</option>
+                                <option value="MAGENTA">Пурпурный</option>
+                            </select>
+                            <label for="colorConditionComparison">Условие:</label>
+                            <select id="colorConditionComparison" name="color_condition_comparison">
+                                <option value="GT">Больше (&gt;)</option>
+                                <option value="LT">Меньше (&lt;)</option>
+                                <option value="EQ">Равно (=)</option>
+                            </select>
+                            <label for="colorConditionValue">Значение:</label>
+                            <input type="number" id="colorConditionValue" name="color_condition_value" value="0">
+                        </div>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="enableReferenceLine" name="enable_reference_line">
+                        <label for="enableReferenceLine">Опорная линия</label>
+                        <div id="referenceLineControls" class="hidden">
+                            <label for="referenceLineValue">Значение:</label>
+                            <input type="number" id="referenceLineValue" name="reference_line_value" value="0">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button type="submit">Generate Chart</button>
+            </form>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
